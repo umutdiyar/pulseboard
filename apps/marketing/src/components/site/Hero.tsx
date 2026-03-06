@@ -10,7 +10,7 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 16, filter: "blur(6px)" },
+  hidden: { opacity: 0, y: 14, filter: "blur(6px)" },
   show: {
     opacity: 1,
     y: 0,
@@ -20,17 +20,18 @@ const item = {
 };
 
 export function Hero() {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3001";
+  const appBase = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3001";
+  const registerUrl = new URL("/register", appBase).toString();
 
   return (
     <section className="relative overflow-hidden">
-      {/* background glow */}
+      {/* soft background */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-[-120px] h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute right-[-120px] top-[120px] h-[360px] w-[360px] rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(1200px_circle_at_20%_10%,rgba(99,102,241,0.18),transparent_55%),radial-gradient(900px_circle_at_80%_20%,rgba(56,189,248,0.16),transparent_55%),radial-gradient(900px_circle_at_60%_90%,rgba(16,185,129,0.14),transparent_55%)]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 md:pb-28 md:pt-20">
+      <div className="mx-auto max-w-6xl px-4 pb-18 pt-14 md:pb-24 md:pt-20">
         <motion.div
           variants={container}
           initial="hidden"
@@ -40,29 +41,29 @@ export function Hero() {
           <div className="space-y-6">
             <motion.div
               variants={item}
-              className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs text-white/80 ring-1 ring-white/15"
+              className="inline-flex items-center gap-2 rounded-full bg-black/5 px-3 py-1 text-xs text-black/70 ring-1 ring-black/10"
             >
               <Sparkles size={14} />
-              Multi-tenant SaaS dashboard template
+              Gerçek bir SaaS projesi: Marketing + Panel + API
             </motion.div>
 
             <motion.h1
               variants={item}
-              className="text-4xl font-semibold tracking-tight text-white md:text-5xl"
+              className="text-4xl font-semibold tracking-tight text-black md:text-5xl"
             >
-              Ship a real SaaS:
-              <span className="block text-white/80">
-                Marketing site + Panel + API
+              Ekibin için modern
+              <span className="block text-black/70">
+                workspace tabanlı yönetim paneli
               </span>
             </motion.h1>
 
             <motion.p
               variants={item}
-              className="text-base leading-relaxed text-white/70"
+              className="text-base leading-relaxed text-black/70"
             >
-              PulseBoard is a modern workspace-based product: auth, roles,
-              projects, tasks, metrics, and deployment-ready setup. Built to
-              look and feel like a production app.
+              PulseBoard ile projeleri, görevleri ve müşteri adaylarını tek
+              yerde yönet. JWT + рол sistemi, hızlı arayüz ve üretim kalitesinde
+              mimariyle.
             </motion.p>
 
             <motion.div
@@ -70,30 +71,30 @@ export function Hero() {
               className="flex flex-col gap-3 sm:flex-row"
             >
               <Link
-                href={`${appUrl}/register`}
-                className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-white/90"
+                href={registerUrl}
+                className="inline-flex items-center justify-center rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-black/90"
               >
-                Create account
+                Hesap Oluştur
               </Link>
               <Link
-                href="/features"
-                className="inline-flex items-center justify-center rounded-2xl bg-white/10 px-5 py-3 text-sm font-medium text-white ring-1 ring-white/15 transition hover:bg-white/15"
+                href="#pricing"
+                className="inline-flex items-center justify-center rounded-2xl bg-white/70 px-5 py-3 text-sm font-medium text-black ring-1 ring-black/10 backdrop-blur transition hover:bg-white"
               >
-                See features
+                Planları Gör
               </Link>
             </motion.div>
 
             <motion.ul
               variants={item}
-              className="grid gap-2 text-sm text-white/70"
+              className="grid gap-2 text-sm text-black/70"
             >
               {[
-                "Workspaces + roles (Owner/Admin/Member)",
-                "JWT + Refresh Token auth flow",
-                "Fast UI: skeletons, empty states, transitions",
+                "Workspace + rol yönetimi (Owner/Admin/Member)",
+                "JWT + Refresh Token kimlik doğrulama",
+                "Hızlı UI: skeleton, empty state, sayfa geçişleri",
               ].map((t) => (
                 <li key={t} className="flex items-center gap-2">
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15">
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-xl bg-black/5 ring-1 ring-black/10">
                     <Check size={14} />
                   </span>
                   {t}
@@ -102,58 +103,58 @@ export function Hero() {
             </motion.ul>
           </div>
 
-          {/* “product mock” */}
+          {/* product mock */}
           <motion.div
-            initial={{ opacity: 0, y: 18, rotateX: 12 }}
+            initial={{ opacity: 0, y: 18, rotateX: 10 }}
             animate={{ opacity: 1, y: 0, rotateX: 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
             className="relative"
           >
-            <div className="relative rounded-3xl bg-white/5 p-4 ring-1 ring-white/15">
-              <div className="flex items-center justify-between rounded-2xl bg-black/40 px-4 py-3 ring-1 ring-white/10">
+            <div className="relative rounded-3xl bg-white p-4 ring-1 ring-black/10 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.35)]">
+              <div className="flex items-center justify-between rounded-2xl bg-black px-4 py-3">
                 <div className="text-sm font-medium text-white/90">
                   PulseBoard • Dashboard
                 </div>
-                <div className="text-xs text-white/60">Live</div>
+                <div className="text-xs text-white/70">Canlı</div>
               </div>
 
               <div className="mt-4 grid gap-3">
                 <div className="grid grid-cols-3 gap-3">
-                  {["Active Projects", "Open Tasks", "New Leads"].map((k) => (
+                  {["Aktif Proje", "Açık Görev", "Yeni Lead"].map((k) => (
                     <div
                       key={k}
-                      className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10"
+                      className="rounded-2xl bg-black/5 p-4 ring-1 ring-black/10"
                     >
-                      <div className="text-xs text-white/60">{k}</div>
-                      <div className="mt-2 text-2xl font-semibold text-white">
+                      <div className="text-xs text-black/60">{k}</div>
+                      <div className="mt-2 text-2xl font-semibold text-black">
                         12
                       </div>
-                      <div className="mt-2 h-2 w-full rounded-full bg-white/10">
-                        <div className="h-2 w-2/3 rounded-full bg-white/40" />
+                      <div className="mt-2 h-2 w-full rounded-full bg-black/10">
+                        <div className="h-2 w-2/3 rounded-full bg-black/40" />
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
+                <div className="rounded-2xl bg-black/5 p-4 ring-1 ring-black/10">
                   <div className="flex items-center justify-between">
-                    <div className="text-sm font-medium text-white/90">
-                      Today
+                    <div className="text-sm font-medium text-black/90">
+                      Bugün
                     </div>
-                    <div className="text-xs text-white/60">Sprint 03</div>
+                    <div className="text-xs text-black/60">Sprint 03</div>
                   </div>
                   <div className="mt-3 grid gap-2">
                     {[
-                      "Auth refresh token flow",
-                      "Workspace RBAC middleware",
-                      "Marketing animations polish",
+                      "Refresh token akışı",
+                      "Workspace RBAC",
+                      "Marketing sayfası polish",
                     ].map((t) => (
                       <div
                         key={t}
-                        className="flex items-center justify-between rounded-xl bg-black/30 px-3 py-2 ring-1 ring-white/10"
+                        className="flex items-center justify-between rounded-xl bg-white px-3 py-2 ring-1 ring-black/10"
                       >
-                        <div className="text-sm text-white/80">{t}</div>
-                        <div className="text-xs text-white/60">In progress</div>
+                        <div className="text-sm text-black/80">{t}</div>
+                        <div className="text-xs text-black/60">Devam</div>
                       </div>
                     ))}
                   </div>
@@ -161,10 +162,9 @@ export function Hero() {
               </div>
             </div>
 
-            {/* subtle floating */}
             <motion.div
               aria-hidden
-              className="pointer-events-none absolute -bottom-6 -left-6 h-20 w-20 rounded-3xl bg-white/10 blur-xl"
+              className="pointer-events-none absolute -bottom-6 -left-6 h-24 w-24 rounded-3xl bg-black/5 blur-xl"
               animate={{ y: [0, -10, 0], opacity: [0.6, 0.9, 0.6] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             />

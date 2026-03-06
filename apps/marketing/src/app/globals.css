@@ -3,6 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color-scheme: light;
+
+  --pb-bg: 255 255 255;
+  --pb-fg: 10 10 10;
+
+  --pb-muted: 20 20 20 / 0.65;
+
+  --pb-a1: 99 102 241;
+  --pb-a2: 56 189 248;
+  --pb-a3: 16 185 129;
+  --pb-a1: 236 72 153;
 }
 
 @theme inline {
