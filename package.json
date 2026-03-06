@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "dev:app": "npm run dev --workspace=app",
+    "dev:marketing": "npm run dev --workspace=marketing",
+    "dev": "concurrently \"npm run dev:app\" \"npm run dev:marketing\""
+  }
+}
