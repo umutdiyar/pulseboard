@@ -2,25 +2,56 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { AuthDivider } from "@/components/auth/auth-divider";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { AuthSocialButtons } from "@/components/auth/auth-social-buttons";
 import { PasswordField } from "@/components/auth/password-field";
+import { useRedirectIfAuthenticated } from "@/lib/auth/auth-guard";
+import { DEMO_CREDENTIALS } from "@/lib/auth/auth-config";
+import { useAuthStore } from "@/store/auth-store";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const router = useRouter();
+  const { hydrated } = useRedirectIfAuthenticated("/dashboard");
+
+  const login = useAuthStore((s) => s.login);
+  const loginAsDemo = useAuthStore((s) => s.loginAsDemo);
+
+  const [email, setEmail] = useState(DEMO_CREDENTIALS.email);
+  const [password, setPassword] = useState(DEMO_CREDENTIALS.password);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
 
-    await new Promise((r) => setTimeout(r, 1200));
-    localStorage.setItem("pb_token", "demo-token");
-    window.location.href = "/layout";
+    const result = await login(email, password);
+
     setIsLoading(false);
+
+    if (!result.success) {
+      setError(result.message ?? "Giriş başarısız.");
+      return;
+    }
+
+    router.replace("/dashboard");
+  }
+
+  function handleDemoLogin() {
+    loginAsDemo();
+    router.replace("/dashboard");
+  }
+
+  if (!hydrated) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#fafafa]">
+        <div className="text-sm text-gray-500">Yükleniyor...</div>
+      </div>
+    );
   }
 
   return (
@@ -38,6 +69,12 @@ export default function LoginPage() {
             Ücretsiz başlayın →
           </Link>
         </p>
+      </div>
+
+      <div className="mb-4 rounded-xl border border-blue-100 py-3 text-[12px] text-blue-700 bg-blue-50 px-4">
+        Demo girişi için e-posta: <strong>{DEMO_CREDENTIALS.email}</strong>
+        <br />
+        Şifre: <strong>{DEMO_CREDENTIALS.password}</strong>
       </div>
 
       <div className="mb-6">
@@ -170,6 +207,14 @@ export default function LoginPage() {
               </svg>
             </span>
           )}
+        </button>
+
+        <button
+          type="button"
+          onClick={handleDemoLogin}
+          className="h-11 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+        >
+          Demo kullanıcı ile giriş yap
         </button>
       </form>
 

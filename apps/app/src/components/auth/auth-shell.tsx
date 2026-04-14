@@ -20,32 +20,33 @@ export function AuthShell({ mode, children }: AuthShellProps) {
         <div className="pointer-events-none absolute top-1/3 -right-32 h-[400px] w-[400px] rounded-full bg-emerald-500/6 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-40 left-1/4 h-[450px] w-[450px] rounded-full bg-indigo-500/7 blur-3xl" />
 
-        <div className="relative z-10 flex items-center justify-between px-10 pt-10">
-          <Link
-            href="http://localhost:3000"
-            className="flex items-center gap-2.5"
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-[8px] bg-white shadow-lg">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M9.5 2L4 9h4.5L6.5 14L12 7H7.5L9.5 2Z"
-                  fill="#080808"
-                />
-              </svg>
-            </div>
-            <span className="text-[15px] font-semibold tracking-[-0.01em] text-white">
-              PulseBoard
-            </span>
-          </Link>
+        <div className="relative flex flex-1 items-center justify-center overflow-y-auto bg-[#fafafa] px-4 py-8 sm:px-6 lg:py-12">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-50/30 via-transparent to-blue-50/20" />
 
-          {isLogin ? (
-            <div className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-              <span className="text-xs font-medium text-white/30">
-                Tüm sistemler çalışıyor
+          <div className="lg:hidden absolute left-6 top-6">
+            <Link
+              href="http://localhost:3000"
+              className="flex items-center gap-2"
+            >
+              <div className="flex h-7 w-7 items-center justify-center rounded-[7px] bg-[#080808]">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M9.5 2L4 9h4.5L6.5 14L12 7H7.5L9.5 2Z"
+                    fill="white"
+                  />
+                </svg>
+              </div>
+              <span className="text-[15px] font-semibold tracking-[-0.01em] text-gray-900">
+                PulseBoard
               </span>
-            </div>
-          ) : null}
+            </Link>
+          </div>
+
+          <div
+            className={`relative w-full ${isLogin ? "max-w-[400px]" : "max-w-[440px]"} mt-12 lg:mt-0`}
+          >
+            {children}
+          </div>
         </div>
 
         {isLogin ? (
