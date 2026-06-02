@@ -10,43 +10,50 @@ export function AuthShell({ mode, children }: AuthShellProps) {
   const isLogin = mode === "login";
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen bg-[#fafafa] lg:flex">
       <div
-        className={`relative hidden overflow-hidden lg:flex ${
+        className={`relative hidden overflow-hidden bg-[#080808] lg:flex ${
           isLogin ? "lg:w-[52%] xl:w-[55%]" : "lg:w-[46%] xl:w-[48%]"
-        } flex-col bg-[#080808]`}
+        } flex-col`}
       >
         <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-blue-500/8 blur-3xl" />
         <div className="pointer-events-none absolute top-1/3 -right-32 h-[400px] w-[400px] rounded-full bg-emerald-500/6 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-40 left-1/4 h-[450px] w-[450px] rounded-full bg-indigo-500/7 blur-3xl" />
 
-        <div className="relative flex flex-1 items-center justify-center overflow-y-auto bg-[#fafafa] px-4 py-8 sm:px-6 lg:py-12">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-50/30 via-transparent to-blue-50/20" />
+        {!isLogin && (
+          <>
+            <div className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-emerald-500/8 blur-3xl" />
+            <div className="pointer-events-none absolute top-1/2 -left-24 h-[360px] w-[360px] rounded-full bg-blue-400/6 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-32 right-1/4 h-[380px] w-[380px] rounded-full bg-violet-500/6 blur-3xl" />
+          </>
+        )}
 
-          <div className="lg:hidden absolute left-6 top-6">
-            <Link
-              href="http://localhost:3000"
-              className="flex items-center gap-2"
-            >
-              <div className="flex h-7 w-7 items-center justify-center rounded-[7px] bg-[#080808]">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M9.5 2L4 9h4.5L6.5 14L12 7H7.5L9.5 2Z"
-                    fill="white"
-                  />
-                </svg>
-              </div>
-              <span className="text-[15px] font-semibold tracking-[-0.01em] text-gray-900">
-                PulseBoard
-              </span>
-            </Link>
-          </div>
-
-          <div
-            className={`relative w-full ${isLogin ? "max-w-[400px]" : "max-w-[440px]"} mt-12 lg:mt-0`}
+        <div className="relative z-10 flex items-center justify-between px-10 pt-10">
+          <Link
+            href="http://localhost:3000"
+            className="flex items-center gap-2.5"
           >
-            {children}
-          </div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-[8px] bg-white shadow-lg">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M9.5 2L4 9h4.5L6.5 14L12 7H7.5L9.5 2Z"
+                  fill="#080808"
+                />
+              </svg>
+            </div>
+            <span className="text-[15px] font-semibold tracking-[-0.01em] text-white">
+              PulseBoard
+            </span>
+          </Link>
+
+          {isLogin ? (
+            <div className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+              <span className="text-xs font-medium text-white/30">
+                Tüm sistemler çalışıyor
+              </span>
+            </div>
+          ) : null}
         </div>
 
         {isLogin ? (
@@ -154,10 +161,6 @@ export function AuthShell({ mode, children }: AuthShellProps) {
           </>
         ) : (
           <>
-            <div className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-emerald-500/8 blur-3xl" />
-            <div className="pointer-events-none absolute top-1/2 -left-24 h-[360px] w-[360px] rounded-full bg-blue-400/6 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-32 right-1/4 h-[380px] w-[380px] rounded-full bg-violet-500/6 blur-3xl" />
-
             <div className="relative z-10 flex flex-1 flex-col justify-center px-10 pb-6 xl:px-14">
               <div className="max-w-[340px]">
                 <div className="mb-8">
@@ -251,10 +254,10 @@ export function AuthShell({ mode, children }: AuthShellProps) {
         )}
       </div>
 
-      <div className="relative flex flex-1 items-center justify-center overflow-y-auto bg-[#fafafa] px-4 py-10 sm:px-6 lg:py-12">
+      <div className="relative flex min-h-screen flex-1 items-center justify-center overflow-y-auto bg-[#fafafa] px-4 py-8 sm:px-6 lg:min-h-0 lg:py-12">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-50/30 via-transparent to-blue-50/20" />
 
-        <div className="lg:hidden absolute left-6 top-6">
+        <div className="absolute left-6 top-6 lg:hidden">
           <Link
             href="http://localhost:3000"
             className="flex items-center gap-2"
@@ -270,7 +273,13 @@ export function AuthShell({ mode, children }: AuthShellProps) {
           </Link>
         </div>
 
-        <div className="relative w-full max-w-[540px]">{children}</div>
+        <div
+          className={`relative z-10 w-full ${
+            isLogin ? "max-w-[400px]" : "max-w-[440px]"
+          } pt-12 sm:pt-14 lg:pt-0`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );
