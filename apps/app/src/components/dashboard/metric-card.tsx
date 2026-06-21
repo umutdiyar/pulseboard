@@ -38,11 +38,11 @@ export function MetricCard({
       </div>
 
       <div className="mt-5">
-        <p className="text-sm text-slate-500">{title}</p>
+        <p className="text-sm text-zinc-500 font-medium">{title}</p>
         <p className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">
           {value}
         </p>
-        <p className="mt-2 text-sm text-slate-500">{description}</p>
+        <p className="mt-2 text-sm text-zinc-500 leading-5">{description}</p>
       </div>
     </motion.div>
   );

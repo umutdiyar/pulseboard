@@ -28,16 +28,16 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-sm font-medium text-slate-500">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-zinc-500 uppercase tracking-[0.18em]">
               {workspace?.name ?? "PulseBoard Demo"}
             </p>
 
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl">
               Hoş geldin, {user?.name ?? "Demo User"}
             </h1>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-500">
               Bugünkü workspace durumun burada. Projeler, sprintler, görevler ve
               lead pipeline tek yerden takip ediliyor.
             </p>

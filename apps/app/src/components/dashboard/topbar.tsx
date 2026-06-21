@@ -19,8 +19,10 @@ export function Topbar() {
           <MobileSidebar />
 
           <div>
-            <p className="text-sm font-semibold text-slate-900">Dashboard</p>
-            <p className="hidden text-xs text-slate-500 sm:block">
+            <h1 className="text-sm font-semibold text-zinc-950 tracking-tight">
+              Dashboard
+            </h1>
+            <p className="hidden text-xs text-zinc-500 sm:block">
               Workspace genel görünüm
             </p>
           </div>
