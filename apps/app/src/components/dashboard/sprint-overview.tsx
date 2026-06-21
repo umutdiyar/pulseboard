@@ -2,12 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-
-const tasks = [
-  { title: "Auth guard polish", status: "In progress" },
-  { title: "Workspace switcher UI", status: "Review" },
-  { title: "Lead pipeline mock data", status: "Done" },
-];
+import { sprintTasks } from "@/data/dashboard-data";
 
 export function SprintOverview() {
   return (
@@ -44,17 +39,21 @@ export function SprintOverview() {
       </div>
 
       <div className="mt-6 space-y-3">
-        {tasks.map((task) => (
-          <div
-            key={task.title}
-            className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"
-          >
-            <span className="text-sm font-medium text-slate-700">
-              {task.title}
-            </span>
-            <span className="text-xs text-slate-500">{task.status}</span>
-          </div>
-        ))}
+        {sprintTasks.map((task) => {
+          const Icon = task.icon;
+
+          return (
+            <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <div className="flex items-center gap-3">
+                <Icon size={17} className="text-slate-500" />
+                <span className="text-sm font-medium text-slate-700">
+                  {task.title}
+                </span>
+              </div>
+              <span className="text-xs text-slate-500">{task.status}</span>
+            </div>
+          );
+        })}
       </div>
     </motion.section>
   );

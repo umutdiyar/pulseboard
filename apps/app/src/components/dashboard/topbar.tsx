@@ -5,6 +5,9 @@ import { Bell, Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth-store";
 
+import { MobileSidebar } from "@/components/dashboard/mobile-sidebar";
+import { UserMenu } from "@/components/dashboard/user-menu";
+
 export function Topbar() {
   const router = useRouter();
   const logout = useAuthStore((s) => s.logout);
@@ -13,14 +16,12 @@ export function Topbar() {
     <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="icon" className="lg:hidden">
-            <Menu size={18} />
-          </Button>
+          <MobileSidebar />
 
           <div>
             <p className="text-sm font-semibold text-slate-900">Dashboard</p>
             <p className="hidden text-xs text-slate-500 sm:block">
-              Task, sprint ve lead yönetimi genel görünüm
+              Workspace genel görünüm
             </p>
           </div>
         </div>
@@ -40,15 +41,7 @@ export function Topbar() {
             <Bell size={18} />
           </Button>
 
-          <Button
-            variant="outline"
-            onClick={() => {
-              logout();
-              router.replace("/login");
-            }}
-          >
-            Çıkış
-          </Button>
+          <UserMenu />
         </div>
       </div>
     </header>

@@ -9,12 +9,14 @@ type MetricCardProps = {
   change: string;
   icon: LucideIcon;
   delay?: number;
+  description: string;
 };
 
 export function MetricCard({
   title,
   value,
   change,
+  description,
   icon: Icon,
   delay = 0,
 }: MetricCardProps) {
@@ -40,6 +42,7 @@ export function MetricCard({
         <p className="mt-1 text-3xl font-semibold tracking-tight text-slate-950">
           {value}
         </p>
+        <p className="mt-2 text-sm text-slate-500">{description}</p>
       </div>
     </motion.div>
   );

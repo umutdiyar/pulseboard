@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/store/auth-store";
+import { WorkspaceSwitcher } from "@/components/dashboard/workspace-switcher";
+import { UserMenu } from "@/components/dashboard/user-menu";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: BarChart3, active: true },
@@ -41,17 +43,7 @@ export function AppSidebar() {
       </div>
 
       <div className="p-4">
-        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-          <p className="text-xs font-medium text-slate-500">Workspace</p>
-          <div className="mt-2 flex items-center justify-between gap-2">
-            <p className="truncate text-sm font-semibold text-slate-900">
-              PulseBoard Demo
-            </p>
-            <Badge variant="secondary" className="rounded-full">
-              Owner
-            </Badge>
-          </div>
-        </div>
+        <WorkspaceSwitcher />
       </div>
 
       <nav className="flex-1 space-y-1 px-3">
@@ -77,20 +69,7 @@ export function AppSidebar() {
       </nav>
 
       <div className="border-t border-slate-200/70 p-4">
-        <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-cyan-400 text-xs font-bold text-white">
-            DU
-          </div>
-
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold">
-              {user?.name ?? "Demo User"}
-            </p>
-            <p className="truncate text-xs text-slate-500">
-              {user?.email ?? "demo@pulseboard.app"}
-            </p>
-          </div>
-        </div>
+        <UserMenu />
       </div>
     </aside>
   );

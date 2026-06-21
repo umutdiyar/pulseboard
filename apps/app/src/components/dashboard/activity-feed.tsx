@@ -1,24 +1,7 @@
 "use client";
 
+import { activities } from "@/data/dashboard-data";
 import { motion } from "framer-motion";
-
-const activities = [
-  {
-    user: "Umut",
-    action: "Sprint 03 için yeni görev ekledi.",
-    time: "5 dk önce",
-  },
-  {
-    user: "Demo User",
-    action: "Yeni lead kaydı oluşturdu.",
-    time: "18 dk önce",
-  },
-  {
-    user: "System",
-    action: "Workspace ayarları güncellendi.",
-    time: "1 saat önce",
-  },
-];
 
 export function ActivityFeed() {
   return (
@@ -36,21 +19,27 @@ export function ActivityFeed() {
       </div>
 
       <div className="mt-6 space-y-4">
-        {activities.map((activity) => (
-          <div key={activity.action} className="flex gap-3">
-            <div className="mt-1 h-2.5 w-2.5 rounded-full bg-slate-900" />
+        {activities.map((activity) => {
+          const Icon = activity.icon;
 
-            <div>
-              <p className="text-sm text-slate-700">
-                <span className="font-semibold text-slate-950">
-                  {activity.user}
-                </span>{" "}
-                {activity.action}
-              </p>
-              <p className="mt-0.5 text-xs text-slate-400">{activity.time}</p>
+          return (
+            <div key={activity.action} className="flex gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">
+                <Icon size={16} />
+              </div>
+
+              <div>
+                <p className="text-sm text-slate-700">
+                  <span className="font-semibold text-slate-950">
+                    {activity.user}
+                  </span>{" "}
+                  {activity.action}
+                </p>
+                <p className="mt-0.5 text-xs text-slate-400">{activity.time}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </motion.section>
   );
