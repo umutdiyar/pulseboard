@@ -10,18 +10,18 @@ import {
   Target,
   Sparkles,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/store/auth-store";
 import { WorkspaceSwitcher } from "@/components/dashboard/workspace-switcher";
 import { UserMenu } from "@/components/dashboard/user-menu";
+import { usePathname } from "next/navigation";
 
 const navItems = [
-  { label: "Dashboard", href: "/dashboard", icon: BarChart3, active: true },
-  { label: "Projects", href: "#", icon: FolderKanban },
-  { label: "Tasks", href: "#", icon: ListTodo },
-  { label: "Leads", href: "#", icon: Target },
-  { label: "Team", href: "#", icon: Users },
-  { label: "Settings", href: "#", icon: Settings },
+  { label: "Dashboard", href: "/dashboard", icon: BarChart3 },
+  { label: "Projects", href: "/projects", icon: FolderKanban },
+  { label: "Tasks", href: "/tasks", icon: ListTodo },
+  { label: "Leads", href: "/leads", icon: Target },
+  { label: "Team", href: "/team", icon: Users },
+  { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -49,6 +49,8 @@ export function AppSidebar() {
       <nav className="flex-1 space-y-1 px-3">
         {navItems.map((item) => {
           const Icon = item.icon;
+          const pathname = usePathname();
+          const active = pathname === item.href;
 
           return (
             <Link
@@ -56,7 +58,7 @@ export function AppSidebar() {
               href={item.href}
               className={[
                 "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition",
-                item.active
+                active
                   ? "bg-slate-950 text-white shadow-sm"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
               ].join(" ")}

@@ -1,0 +1,60 @@
+export type ProjectStatus = "Planning" | "Active" | "Paused" | "Completed";
+
+export type Project = {
+  id: string;
+  name: string;
+  description: string;
+  status: ProjectStatus;
+  progress: number;
+  owner: string;
+  tasks: number;
+  completedTasks: number;
+  dueDate: string;
+};
+
+export const projects: Project[] = [
+  {
+    id: "p-1",
+    name: "PulseBoard App",
+    description: "Dashboard, auth flow ve workspace yönetimi.",
+    status: "Active",
+    progress: 72,
+    owner: "Umut",
+    tasks: 38,
+    completedTasks: 24,
+    dueDate: "12 Mar",
+  },
+  {
+    id: "p-2",
+    name: "Marketing Website",
+    description: "Landing, pricing, docs ve CTA akışları.",
+    status: "Active",
+    progress: 84,
+    owner: "Demo User",
+    tasks: 21,
+    completedTasks: 18,
+    dueDate: "08 Mar",
+  },
+  {
+    id: "p-3",
+    name: "Backend API",
+    description: "ASP.NET Core auth, workspace ve task API.",
+    status: "Planning",
+    progress: 18,
+    owner: "Umut",
+    tasks: 16,
+    completedTasks: 3,
+    dueDate: "22 Mar",
+  },
+  {
+    id: "p-4",
+    name: "Mini CRM",
+    description: "Lead pipeline, müşteri kartları ve takip akışı.",
+    status: "Paused",
+    progress: 36,
+    owner: "Demo User",
+    tasks: 14,
+    completedTasks: 5,
+    dueDate: "30 Mar",
+  },
+];

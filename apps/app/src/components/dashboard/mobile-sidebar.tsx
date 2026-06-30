@@ -19,14 +19,15 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { WorkspaceSwitcher } from "@/components/dashboard/workspace-switcher";
+import { usePathname } from "next/navigation";
 
 const navItems = [
-  { label: "Dashboard", href: "/dashboard", icon: BarChart3, active: true },
-  { label: "Projects", href: "#", icon: FolderKanban },
-  { label: "Tasks", href: "#", icon: ListTodo },
-  { label: "Leads", href: "#", icon: Target },
-  { label: "Team", href: "#", icon: Users },
-  { label: "Settings", href: "#", icon: Settings },
+  { label: "Dashboard", href: "/dashboard", icon: BarChart3 },
+  { label: "Projects", href: "/projects", icon: FolderKanban },
+  { label: "Tasks", href: "/tasks", icon: ListTodo },
+  { label: "Leads", href: "/leads", icon: Target },
+  { label: "Team", href: "/team", icon: Users },
+  { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function MobileSidebar() {
@@ -55,6 +56,8 @@ export function MobileSidebar() {
         <nav className="space-y-1 px-3">
           {navItems.map((item) => {
             const Icon = item.icon;
+            const pathname = usePathname();
+            const active = pathname === item.href;
 
             return (
               <Link
@@ -62,7 +65,7 @@ export function MobileSidebar() {
                 href={item.href}
                 className={[
                   "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition",
-                  item.active
+                  active
                     ? "bg-slate-950 text-white"
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
                 ].join(" ")}
