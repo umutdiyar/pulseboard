@@ -9,11 +9,13 @@ import {
   Settings,
   Target,
   Sparkles,
+  LogOut,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
 import { WorkspaceSwitcher } from "@/components/dashboard/workspace-switcher";
 import { UserMenu } from "@/components/dashboard/user-menu";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: BarChart3 },
@@ -25,10 +27,12 @@ const navItems = [
 ];
 
 export function AppSidebar() {
+  const router = useRouter();
   const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
 
   return (
-    <aside className="hidden w-72 shrink-0 border-r border-slate-200/70 bg-white lg:flex lg:flex-col">
+    <aside className="hidden h-screen w-72 shrink-0 border-r border-slate-200/70 bg-white lg:flex lg:flex-col">
       <div className="border-b border-slate-200/70 p-5">
         <Link href="/dashboard" className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-sm">
@@ -71,7 +75,34 @@ export function AppSidebar() {
       </nav>
 
       <div className="border-t border-slate-200/70 p-4">
-        <UserMenu />
+        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-400 text-xs font-bold text-white">
+              AU
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold text-slate-950">
+                {user?.name ?? "Admin User"}
+              </p>
+              <p className="truncate text-xs text-slate-500">
+                {user?.email ?? "admin@pulseboard.app"}
+              </p>
+            </div>
+          </div>
+
+          <Button
+            variant="outline"
+            className="mt-3 w-full rounded-2xl bg-white text-xs"
+            onClick={() => {
+              logout();
+              router.replace("/login");
+            }}
+          >
+            <LogOut size={14} />
+            Çıkış yap
+          </Button>
+        </div>
       </div>
     </aside>
   );

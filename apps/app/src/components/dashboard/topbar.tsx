@@ -6,15 +6,14 @@ import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth-store";
 
 import { MobileSidebar } from "@/components/dashboard/mobile-sidebar";
-import { UserMenu } from "@/components/dashboard/user-menu";
 
 export function Topbar() {
   const router = useRouter();
   const logout = useAuthStore((s) => s.logout);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl">
-      <div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40 h-16 shrink-0 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl">
+      <div className="flex h-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
           <MobileSidebar />
 
@@ -42,8 +41,6 @@ export function Topbar() {
           <Button variant="outline" size="icon">
             <Bell size={18} />
           </Button>
-
-          <UserMenu />
         </div>
       </div>
     </header>

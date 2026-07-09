@@ -9,6 +9,7 @@ import {
   Sparkles,
   Target,
   Users,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +20,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { WorkspaceSwitcher } from "@/components/dashboard/workspace-switcher";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth-store";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: BarChart3 },
@@ -31,6 +33,10 @@ const navItems = [
 ];
 
 export function MobileSidebar() {
+  const router = useRouter();
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -76,6 +82,37 @@ export function MobileSidebar() {
             );
           })}
         </nav>
+
+        <div className="mt-6 border-t border-slate-200 p-4">
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-400 text-xs font-bold text-white">
+                AU
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-slate-950">
+                  {user?.name ?? "Admin User"}
+                </p>
+                <p className="truncate text-xs text-slate-500">
+                  {user?.email ?? "admin@pulseboard.app"}
+                </p>
+              </div>
+            </div>
+
+            <Button
+              variant="outline"
+              className="mt-3 w-full rounded-2xl bg-white text-xs"
+              onClick={() => {
+                logout();
+                router.replace("/login");
+              }}
+            >
+              <LogOut size={14} />
+              Çıkış yap
+            </Button>
+          </div>
+        </div>
       </SheetContent>
     </Sheet>
   );
