@@ -5,9 +5,11 @@ import { ProjectCard } from "@/components/projects/project-card";
 import { projects } from "@/data/projects-data";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
+import { useModalStore } from "@/store/modal-store";
 
 export default function ProjectsPage() {
   const { canRenderProtected } = useRequireAuth("/login");
+  const openModal = useModalStore((state) => state.openModal);
 
   if (!canRenderProtected) {
     return (
@@ -39,9 +41,12 @@ export default function ProjectsPage() {
               </p>
             </div>
 
-            <Button className="rounded-2xl">
+            <Button
+              className="rounded-2xl"
+              onClick={() => openModal("project")}
+            >
               <Plus size={18} />
-              New Project
+              Yeni Proje
             </Button>
           </div>
         </div>

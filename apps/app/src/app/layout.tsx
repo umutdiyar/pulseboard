@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import { AppProviders } from "@/components/app-providers";
+
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -9,8 +12,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PulseBoard App",
-  description: "Workspace tabanlı SaaS paneli",
+  title: {
+    default: "PulseBoard",
+    template: "%s | PulseBoard",
+  },
+
+  description:
+    "Küçük ekipler için proje, görev, sprint ve müşteri adayı yönetim platformu.",
 };
 
 export default function RootLayout({
@@ -20,7 +28,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }

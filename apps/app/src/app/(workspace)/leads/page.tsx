@@ -14,6 +14,7 @@ import { LeadSummaryCard } from "@/components/leads/lead-summary-card";
 import { leadColumns, leadSummary } from "@/data/leads-data";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
+import { useModalStore } from "@/store/modal-store";
 
 const summaryCards = [
   {
@@ -44,6 +45,7 @@ const summaryCards = [
 
 export default function LeadsPage() {
   const { canRenderProtected } = useRequireAuth("/login");
+  const openModal = useModalStore((state) => state.openModal);
 
   if (!canRenderProtected) {
     return (
@@ -75,9 +77,9 @@ export default function LeadsPage() {
               </p>
             </div>
 
-            <Button className="rounded-2xl">
+            <Button className="rounded-2xl" onClick={() => openModal("lead")}>
               <Plus size={18} />
-              New Lead
+              Yeni Müşteri Adayı
             </Button>
           </div>
         </div>

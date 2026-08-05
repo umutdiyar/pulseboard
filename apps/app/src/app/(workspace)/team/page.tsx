@@ -6,9 +6,11 @@ import { RoleCard } from "@/components/team/role-card";
 import { roleDescriptions, teamMembers } from "@/data/team-data";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
+import { useModalStore } from "@/store/modal-store";
 
 export default function TeamPage() {
   const { canRenderProtected } = useRequireAuth("/login");
+  const openModal = useModalStore((state) => state.openModal);
 
   if (!canRenderProtected) {
     return (
@@ -41,7 +43,7 @@ export default function TeamPage() {
               </p>
             </div>
 
-            <Button className="rounded-2xl">
+            <Button className="rounded-2xl" onClick={() => openModal("member")}>
               <Plus size={18} />
               Üye Davet Et
             </Button>

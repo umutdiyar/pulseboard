@@ -5,9 +5,11 @@ import { taskColumns } from "@/data/tasks-data";
 import { TaskColumn } from "@/components/tasks/task-column";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
+import { useModalStore } from "@/store/modal-store";
 
 export default function TasksPage() {
   const { canRenderProtected } = useRequireAuth("/login");
+  const openModal = useModalStore((state) => state.openModal);
 
   if (!canRenderProtected) {
     return (
@@ -39,9 +41,9 @@ export default function TasksPage() {
               </p>
             </div>
 
-            <Button className="rounded-2xl">
+            <Button className="rounded-2xl" onClick={() => openModal("task")}>
               <Plus size={18} />
-              New Task
+              Yeni Görev
             </Button>
           </div>
         </div>

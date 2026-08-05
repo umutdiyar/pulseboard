@@ -3,15 +3,29 @@
 import { motion } from "framer-motion";
 import { quickActions } from "@/data/dashboard-data";
 
+import { useModalStore } from "@/store/modal-store";
+
+const modalTypes = {
+  "Yeni Proje": "project",
+  "Görev Ekle": "task",
+  "Lead Oluştur": "lead",
+} as const;
+
 export function QuickActions() {
+  const openModal = useModalStore((state) => state.openModal);
+
   return (
     <section className="grid gap-4 md:grid-cols-3">
       {quickActions.map((action, index) => {
         const Icon = action.icon;
 
+        const modalType = modalTypes[action.title as keyof typeof modalTypes];
+
         return (
           <motion.button
             key={action.title}
+            type="button"
+            onClick={() => openModal(modalType)}
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: index * 0.05 }}
