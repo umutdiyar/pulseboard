@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { CalendarDays, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { Task } from "@/data/tasks-data";
+import type { Task } from "@/types/workspace";
 
 const priorityClasses: Record<Task["priority"], string> = {
   Low: "bg-slate-100 text-slate-700 hover:bg-slate-100",

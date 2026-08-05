@@ -2,14 +2,15 @@
 
 import { FolderKanban, Plus, Search, SlidersHorizontal } from "lucide-react";
 import { ProjectCard } from "@/components/projects/project-card";
-import { projects } from "@/data/projects-data";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/modal-store";
+import { useWorkspaceStore } from "@/store/workspace-store";
 
 export default function ProjectsPage() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
+  const projects = useWorkspaceStore((state) => state.projects);
 
   if (!canRenderProtected) {
     return (

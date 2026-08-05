@@ -1,17 +1,4 @@
-export type LeadStage = "New" | "Qualified" | "Proposal" | "Won";
-export type LeadPriority = "Low" | "Medium" | "High";
-
-export type Lead = {
-  id: string;
-  name: string;
-  company: string;
-  email: string;
-  value: string;
-  stage: LeadStage;
-  priority: LeadPriority;
-  owner: string;
-  lastContact: string;
-};
+import type { Lead, LeadStage } from "@/types/workspace";
 
 export type LeadColumn = {
   title: LeadStage;
@@ -25,7 +12,7 @@ export const leads: Lead[] = [
     name: "Ayşe Demir",
     company: "NovaTech",
     email: "ayse@novatech.com",
-    value: "₺24.000",
+    value: 24000,
     stage: "New",
     priority: "Medium",
     owner: "Umut",
@@ -36,7 +23,7 @@ export const leads: Lead[] = [
     name: "Mert Kaya",
     company: "Atlas Studio",
     email: "mert@atlas.studio",
-    value: "₺42.000",
+    value: 42000,
     stage: "Qualified",
     priority: "High",
     owner: "Demo User",
@@ -47,7 +34,7 @@ export const leads: Lead[] = [
     name: "Zeynep Arslan",
     company: "Kite Digital",
     email: "zeynep@kite.digital",
-    value: "₺18.500",
+    value: 18500,
     stage: "Proposal",
     priority: "Medium",
     owner: "Umut",
@@ -58,7 +45,7 @@ export const leads: Lead[] = [
     name: "Can Yıldız",
     company: "Lumen Works",
     email: "can@lumen.works",
-    value: "₺65.000",
+    value: 65000,
     stage: "Won",
     priority: "High",
     owner: "Demo User",
@@ -69,7 +56,7 @@ export const leads: Lead[] = [
     name: "Ece Şahin",
     company: "Mono Labs",
     email: "ece@monolabs.io",
-    value: "₺12.000",
+    value: 12000,
     stage: "New",
     priority: "Low",
     owner: "Umut",

@@ -11,42 +11,78 @@ import {
 } from "lucide-react";
 import { LeadColumn } from "@/components/leads/lead-column";
 import { LeadSummaryCard } from "@/components/leads/lead-summary-card";
-import { leadColumns, leadSummary } from "@/data/leads-data";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/modal-store";
-
-const summaryCards = [
-  {
-    title: "Pipeline Value",
-    value: leadSummary.totalValue,
-    description: "Toplam fırsat değeri",
-    icon: CircleDollarSign,
-  },
-  {
-    title: "Total Leads",
-    value: String(leadSummary.totalLeads),
-    description: "Aktif pipeline içinde",
-    icon: Users,
-  },
-  {
-    title: "Won Deals",
-    value: String(leadSummary.wonDeals),
-    description: "Bu ay kazanılan",
-    icon: Target,
-  },
-  {
-    title: "Conversion",
-    value: leadSummary.conversionRate,
-    description: "Pipeline dönüşüm oranı",
-    icon: TrendingUp,
-  },
-];
+import { useWorkspaceStore } from "@/store/workspace-store";
 
 export default function LeadsPage() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
+  const leads = useWorkspaceStore((state) => state.leads);
 
+  const totalValue = leads.reduce((total, lead) => total + lead.value, 0);
+
+  const wonDeals = leads.filter((lead) => lead.stage === "Won").length;
+
+  const conversionRate =
+    leads.length === 0 ? 0 : Math.round((wonDeals / leads.length) * 100);
+
+  const formattedTotalValue = new Intl.NumberFormat("tr-TR", {
+    style: "currency",
+    currency: "TRY",
+    maximumFractionDigits: 0,
+  }).format(totalValue);
+
+  const leadColumns = [
+    {
+      title: "New" as const,
+      description: "Yeni gelen fırsatlar",
+      leads: leads.filter((lead) => lead.stage === "New"),
+    },
+    {
+      title: "Qualified" as const,
+      description: "Uygunluğu doğrulananlar",
+      leads: leads.filter((lead) => lead.stage === "Qualified"),
+    },
+    {
+      title: "Proposal" as const,
+      description: "Teklif aşamasında",
+      leads: leads.filter((lead) => lead.stage === "Proposal"),
+    },
+    {
+      title: "Won" as const,
+      description: "Kazanılan fırsatlar",
+      leads: leads.filter((lead) => lead.stage === "Won"),
+    },
+  ];
+
+  const summaryCards = [
+    {
+      title: "Pipeline Value",
+      value: formattedTotalValue,
+      description: "Toplam fırsat değeri",
+      icon: CircleDollarSign,
+    },
+    {
+      title: "Total Leads",
+      value: String(leads.length),
+      description: "Aktif pipeline içinde",
+      icon: Users,
+    },
+    {
+      title: "Won Deals",
+      value: String(wonDeals),
+      description: "Bu ay kazanılan",
+      icon: Target,
+    },
+    {
+      title: "Conversion",
+      value: `${conversionRate}%`,
+      description: "Pipeline dönüşüm oranı",
+      icon: TrendingUp,
+    },
+  ];
   if (!canRenderProtected) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-50">

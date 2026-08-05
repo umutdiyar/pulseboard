@@ -1,14 +1,4 @@
-export type TeamRole = "Owner" | "Admin" | "Member";
-export type TeamStatus = "Active" | "Pending";
-
-export type TeamMember = {
-  id: string;
-  name: string;
-  email: string;
-  role: TeamRole;
-  status: TeamStatus;
-  joinedAt: string;
-};
+import type { TeamMember } from "@/types/workspace";
 
 export const teamMembers: TeamMember[] = [
   {

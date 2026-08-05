@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Mail, MoreHorizontal, UserRound } from "lucide-react";
-import type { Lead } from "@/data/leads-data";
+import type { Lead } from "@/types/workspace";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -13,6 +13,12 @@ const priorityClasses: Record<Lead["priority"], string> = {
 };
 
 export function LeadCard({ lead, index }: { lead: Lead; index: number }) {
+  const formattedValue = new Intl.NumberFormat("tr-TR", {
+    style: "currency",
+    currency: "TRY",
+    maximumFractionDigits: 0,
+  }).format(lead.value);
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 12 }}
@@ -50,7 +56,7 @@ export function LeadCard({ lead, index }: { lead: Lead; index: number }) {
       <div className="mt-5 rounded-2xl bg-slate-50 p-3">
         <p className="text-[11px] text-slate-500">Estimated value</p>
         <p className="mt-1 text-lg font-semibold text-slate-950">
-          {lead.value}
+          {formattedValue}
         </p>
       </div>
 

@@ -1,16 +1,4 @@
-export type ProjectStatus = "Planning" | "Active" | "Paused" | "Completed";
-
-export type Project = {
-  id: string;
-  name: string;
-  description: string;
-  status: ProjectStatus;
-  progress: number;
-  owner: string;
-  tasks: number;
-  completedTasks: number;
-  dueDate: string;
-};
+import type { Project } from "@/types/workspace";
 
 export const projects: Project[] = [
   {

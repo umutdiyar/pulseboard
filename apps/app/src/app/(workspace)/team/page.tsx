@@ -3,7 +3,8 @@
 import { Plus, Search, ShieldCheck, Users } from "lucide-react";
 import { TeamMemberCard } from "@/components/team/team-member-card";
 import { RoleCard } from "@/components/team/role-card";
-import { roleDescriptions, teamMembers } from "@/data/team-data";
+import { roleDescriptions } from "@/data/team-data";
+import { useWorkspaceStore } from "@/store/workspace-store";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/modal-store";
@@ -11,6 +12,7 @@ import { useModalStore } from "@/store/modal-store";
 export default function TeamPage() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
+  const teamMembers = useWorkspaceStore((state) => state.members);
 
   if (!canRenderProtected) {
     return (

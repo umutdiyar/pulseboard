@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Mail, MoreHorizontal, ShieldCheck } from "lucide-react";
-import type { TeamMember } from "@/data/team-data";
+import type { TeamMember } from "@/types/workspace";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 

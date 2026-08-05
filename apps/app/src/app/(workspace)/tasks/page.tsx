@@ -1,15 +1,25 @@
 "use client";
 
-import { ListTodo, Plus, Search, SlidersHorizontal } from "lucide-react";
-import { taskColumns } from "@/data/tasks-data";
+import {
+  AlertCircle,
+  CheckCircle2,
+  Circle,
+  Clock3,
+  ListTodo,
+  Plus,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
 import { TaskColumn } from "@/components/tasks/task-column";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/modal-store";
+import { useWorkspaceStore } from "@/store/workspace-store";
 
 export default function TasksPage() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
+  const tasks = useWorkspaceStore((state) => state.tasks);
 
   if (!canRenderProtected) {
     return (
@@ -18,6 +28,33 @@ export default function TasksPage() {
       </main>
     );
   }
+
+  const taskColumns = [
+    {
+      title: "Todo" as const,
+      description: "Planlanan işler",
+      icon: Circle,
+      tasks: tasks.filter((task) => task.status === "Todo"),
+    },
+    {
+      title: "In Progress" as const,
+      description: "Aktif geliştirme",
+      icon: Clock3,
+      tasks: tasks.filter((task) => task.status === "In Progress"),
+    },
+    {
+      title: "Review" as const,
+      description: "Kontrol bekleyenler",
+      icon: AlertCircle,
+      tasks: tasks.filter((task) => task.status === "Review"),
+    },
+    {
+      title: "Done" as const,
+      description: "Tamamlanan işler",
+      icon: CheckCircle2,
+      tasks: tasks.filter((task) => task.status === "Done"),
+    },
+  ];
 
   return (
     <div className="space-y-8">

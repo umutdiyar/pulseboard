@@ -1,19 +1,12 @@
-import type { LucideIcon } from "lucide-react";
-import { AlertCircle, Circle, Clock3, CheckCircle2 } from "lucide-react";
+import {
+  AlertCircle,
+  Circle,
+  Clock3,
+  CheckCircle2,
+  type LucideIcon,
+} from "lucide-react";
 
-export type TaskStatus = "Todo" | "In Progress" | "Review" | "Done";
-export type TaskPriority = "Low" | "Medium" | "High";
-
-export type Task = {
-  id: string;
-  title: string;
-  description: string;
-  project: string;
-  assignee: string;
-  priority: TaskPriority;
-  status: TaskStatus;
-  dueDate: string;
-};
+import type { Task, TaskStatus } from "@/types/workspace";
 
 export type TaskColumn = {
   title: TaskStatus;

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { CalendarDays, CheckCircle2, MoreHorizontal } from "lucide-react";
-import type { Project } from "@/data/projects-data";
+import type { Project } from "@/types/workspace";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
