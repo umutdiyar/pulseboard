@@ -9,6 +9,20 @@ PulseBoard is a modern SaaS project management platform designed for small teams
 
 It combines **task management**, **sprint planning**, and a lightweight **CRM** into a single workspace. Instead of using multiple tools for projects, customers, and team collaboration, PulseBoard brings everything together in one dashboard.
 
+## Screenshots
+
+### Landing Page
+
+![Landing Page](https://github.com/umutdiyar/pulseboard/blob/main/docs/screenshots/PulseBoard-LandingPage.png)
+
+---
+
+### Dashboard
+
+![Dashboard](https://github.com/umutdiyar/pulseboard/blob/main/docs/screenshots/PulseBoard-Dashboard.png)
+
+> Dashboard currently uses demonstration data while backend integration is under development.
+
 ## Features (Planned)
 
 * 🔐 JWT Authentication & Refresh Tokens
