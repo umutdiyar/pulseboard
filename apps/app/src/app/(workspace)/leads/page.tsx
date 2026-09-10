@@ -3,12 +3,19 @@
 import {
   CircleDollarSign,
   Plus,
-  Search,
-  SlidersHorizontal,
   Target,
   TrendingUp,
   Users,
 } from "lucide-react";
+
+import { ClearFiltersButton } from "@/components/filters/clear-filters-button";
+import { FilterBar } from "@/components/filters/filter-bar";
+import { SearchFilter } from "@/components/filters/search-filter";
+import { SelectFilter } from "@/components/filters/select-filter";
+
+import { filterLeads } from "@/lib/selectors/lead-selectors";
+import { useQueryFilters } from "@/hooks/use-query-filters";
+
 import { LeadColumn } from "@/components/leads/lead-column";
 import { LeadSummaryCard } from "@/components/leads/lead-summary-card";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
@@ -20,6 +27,27 @@ export default function LeadsPage() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
   const leads = useWorkspaceStore((state) => state.leads);
+
+  const { getFilter, setFilter, clearFilters, hasFilters } = useQueryFilters();
+
+  const search = getFilter("q");
+  const stage = getFilter("stage");
+  const priority = getFilter("priority");
+  const owner = getFilter("owner");
+
+  const filteredLeads = filterLeads(leads, {
+    search,
+    stage,
+    priority,
+    owner,
+  });
+
+  const ownerOptions = Array.from(new Set(leads.map((lead) => lead.owner))).map(
+    (ownerName) => ({
+      label: ownerName,
+      value: ownerName,
+    }),
+  );
 
   const totalValue = leads.reduce((total, lead) => total + lead.value, 0);
 
@@ -38,22 +66,22 @@ export default function LeadsPage() {
     {
       title: "New" as const,
       description: "Yeni gelen fırsatlar",
-      leads: leads.filter((lead) => lead.stage === "New"),
+      leads: filteredLeads.filter((lead) => lead.stage === "New"),
     },
     {
       title: "Qualified" as const,
       description: "Uygunluğu doğrulananlar",
-      leads: leads.filter((lead) => lead.stage === "Qualified"),
+      leads: filteredLeads.filter((lead) => lead.stage === "Qualified"),
     },
     {
       title: "Proposal" as const,
       description: "Teklif aşamasında",
-      leads: leads.filter((lead) => lead.stage === "Proposal"),
+      leads: filteredLeads.filter((lead) => lead.stage === "Proposal"),
     },
     {
       title: "Won" as const,
       description: "Kazanılan fırsatlar",
-      leads: leads.filter((lead) => lead.stage === "Won"),
+      leads: filteredLeads.filter((lead) => lead.stage === "Won"),
     },
   ];
 
@@ -83,6 +111,7 @@ export default function LeadsPage() {
       icon: TrendingUp,
     },
   ];
+
   if (!canRenderProtected) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-50">
@@ -134,20 +163,66 @@ export default function LeadsPage() {
         ))}
       </section>
 
-      <section className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row md:items-center md:justify-between">
-        <div className="relative w-full md:max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <input
-            placeholder="Lead ara..."
-            className="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm outline-none transition focus:bg-white focus:ring-4 focus:ring-slate-100"
-          />
-        </div>
+      <FilterBar>
+        <SearchFilter
+          value={search}
+          onChange={(value) => setFilter("q", value)}
+          placeholder="Lead ara..."
+        />
 
-        <Button variant="outline" className="rounded-2xl">
-          <SlidersHorizontal size={18} />
-          Filters
-        </Button>
-      </section>
+        <SelectFilter
+          value={stage}
+          onChange={(value) => setFilter("stage", value)}
+          placeholder="Tüm aşamalar"
+          options={[
+            {
+              label: "Yeni",
+              value: "New",
+            },
+            {
+              label: "Nitelikli",
+              value: "Qualified",
+            },
+            {
+              label: "Teklif",
+              value: "Proposal",
+            },
+            {
+              label: "Kazanıldı",
+              value: "Won",
+            },
+          ]}
+        />
+
+        <SelectFilter
+          value={priority}
+          onChange={(value) => setFilter("priority", value)}
+          placeholder="Tüm öncelikler"
+          options={[
+            {
+              label: "Düşük",
+              value: "Low",
+            },
+            {
+              label: "Orta",
+              value: "Medium",
+            },
+            {
+              label: "Yüksek",
+              value: "High",
+            },
+          ]}
+        />
+
+        <SelectFilter
+          value={owner}
+          onChange={(value) => setFilter("owner", value)}
+          placeholder="Tüm sahipler"
+          options={ownerOptions}
+        />
+
+        <ClearFiltersButton visible={hasFilters()} onClear={clearFilters} />
+      </FilterBar>
 
       <section className="grid gap-5 xl:grid-cols-4">
         {leadColumns.map((column) => (

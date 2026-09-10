@@ -1,16 +1,64 @@
 "use client";
 
-import { FolderKanban, Plus, Search, SlidersHorizontal } from "lucide-react";
+import { FolderKanban, FolderSearch, Plus } from "lucide-react";
+
 import { ProjectCard } from "@/components/projects/project-card";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/modal-store";
 import { useWorkspaceStore } from "@/store/workspace-store";
+import { ClearFiltersButton } from "@/components/filters/clear-filters-button";
+import { FilterBar } from "@/components/filters/filter-bar";
+import { SearchFilter } from "@/components/filters/search-filter";
+import { SelectFilter } from "@/components/filters/select-filter";
+import { EmptyState } from "@/components/shared/empty-state";
+
+import { useQueryFilters } from "@/hooks/use-query-filters";
+
+import { filterProjects } from "@/lib/selectors/project-selectors";
 
 export default function ProjectsPage() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
   const projects = useWorkspaceStore((state) => state.projects);
+
+  const { getFilter, setFilter, clearFilters, hasFilters } = useQueryFilters();
+
+  const search = getFilter("q");
+  const status = getFilter("status");
+  const owner = getFilter("owner");
+
+  const filteredProjects = filterProjects(projects, {
+    search,
+    status,
+    owner,
+  });
+
+  const ownerOptions = Array.from(
+    new Set(projects.map((project) => project.owner)),
+  ).map((ownerName) => ({
+    label: ownerName,
+    value: ownerName,
+  }));
+
+  const statusOptions = [
+    {
+      label: "Planlama",
+      value: "Planning",
+    },
+    {
+      label: "Aktif",
+      value: "Active",
+    },
+    {
+      label: "Duraklatıldı",
+      value: "Paused",
+    },
+    {
+      label: "Tamamlandı",
+      value: "Completed",
+    },
+  ];
 
   if (!canRenderProtected) {
     return (
@@ -53,26 +101,43 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row md:items-center md:justify-between">
-        <div className="relative w-full md:max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <input
-            placeholder="Project ara..."
-            className="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm outline-none transition focus:bg-white focus:ring-4 focus:ring-slate-100"
-          />
+      <FilterBar>
+        <SearchFilter
+          value={search}
+          onChange={(value) => setFilter("q", value)}
+          placeholder="Projelerde ara..."
+        />
+
+        <SelectFilter
+          value={status}
+          onChange={(value) => setFilter("status", value)}
+          placeholder="Tüm durumlar"
+          options={statusOptions}
+        />
+
+        <SelectFilter
+          value={owner}
+          onChange={(value) => setFilter("owner", value)}
+          placeholder="Tüm sahipler"
+          options={ownerOptions}
+        />
+
+        <ClearFiltersButton visible={hasFilters()} onClear={clearFilters} />
+      </FilterBar>
+
+      {filteredProjects.length === 0 ? (
+        <EmptyState
+          icon={FolderSearch}
+          title="Proje bulunamadı"
+          description="Arama kriterlerine uygun proje bulunamadı. Filtreleri değiştirerek tekrar deneyin."
+        />
+      ) : (
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {filteredProjects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
         </div>
-
-        <Button variant="outline" className="rounded-2xl">
-          <SlidersHorizontal size={18} />
-          Filters
-        </Button>
-      </section>
-
-      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {projects.map((project, index) => (
-          <ProjectCard key={project.id} project={project} index={index} />
-        ))}
-      </section>
+      )}
     </div>
   );
 }

@@ -1,11 +1,20 @@
 "use client";
 
-import { Plus, Search, ShieldCheck, Users } from "lucide-react";
+import { Plus, Users, UserSearch } from "lucide-react";
+
+import { ClearFiltersButton } from "@/components/filters/clear-filters-button";
+import { FilterBar } from "@/components/filters/filter-bar";
+import { SearchFilter } from "@/components/filters/search-filter";
+import { SelectFilter } from "@/components/filters/select-filter";
+import { EmptyState } from "@/components/shared/empty-state";
+
 import { TeamMemberCard } from "@/components/team/team-member-card";
 import { RoleCard } from "@/components/team/role-card";
 import { roleDescriptions } from "@/data/team-data";
 import { useWorkspaceStore } from "@/store/workspace-store";
+import { useQueryFilters } from "@/hooks/use-query-filters";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
+import { filterMembers } from "@/lib/selectors/team-selectors";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/modal-store";
 
@@ -13,6 +22,35 @@ export default function TeamPage() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
   const teamMembers = useWorkspaceStore((state) => state.members);
+
+  const { getFilter, setFilter, clearFilters, hasFilters } = useQueryFilters();
+
+  const search = getFilter("q");
+  const role = getFilter("role");
+  const status = getFilter("status");
+
+  const filteredMembers = filterMembers(teamMembers, {
+    search,
+    role,
+    status,
+  });
+
+  const roleOptions = roleDescriptions.map((roleItem) => ({
+    label: roleItem.role,
+    value: roleItem.role,
+  }));
+
+  const statusOptions = Array.from(
+    new Set(teamMembers.map((member) => member.status)),
+  ).map((statusValue) => ({
+    label:
+      statusValue === "Active"
+        ? "Aktif"
+        : statusValue === "Pending"
+          ? "Davet Bekliyor"
+          : statusValue,
+    value: statusValue,
+  }));
 
   if (!canRenderProtected) {
     return (
@@ -64,26 +102,43 @@ export default function TeamPage() {
         ))}
       </section>
 
-      <section className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row md:items-center md:justify-between">
-        <div className="relative w-full md:max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <input
-            placeholder="Üye ara..."
-            className="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm outline-none transition focus:bg-white focus:ring-4 focus:ring-slate-100"
-          />
-        </div>
+      <FilterBar>
+        <SearchFilter
+          value={search}
+          onChange={(value) => setFilter("q", value)}
+          placeholder="Üye ara..."
+        />
 
-        <div className="flex items-center gap-2 rounded-2xl bg-slate-50 px-4 py-2 text-sm text-slate-500">
-          <ShieldCheck size={16} />
-          Rol bazlı erişim mock
-        </div>
-      </section>
+        <SelectFilter
+          value={role}
+          onChange={(value) => setFilter("role", value)}
+          placeholder="Tüm roller"
+          options={roleOptions}
+        />
 
-      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {teamMembers.map((member, index) => (
-          <TeamMemberCard key={member.id} member={member} index={index} />
-        ))}
-      </section>
+        <SelectFilter
+          value={status}
+          onChange={(value) => setFilter("status", value)}
+          placeholder="Tüm durumlar"
+          options={statusOptions}
+        />
+
+        <ClearFiltersButton visible={hasFilters()} onClear={clearFilters} />
+      </FilterBar>
+
+      {filteredMembers.length === 0 ? (
+        <EmptyState
+          icon={UserSearch}
+          title="Üye bulunamadı"
+          description="Arama kriterlerine uygun ekip üyesi bulunamadı. Filtreleri değiştirerek tekrar deneyin."
+        />
+      ) : (
+        <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {filteredMembers.map((member, index) => (
+            <TeamMemberCard key={member.id} member={member} index={index} />
+          ))}
+        </section>
+      )}
     </div>
   );
 }

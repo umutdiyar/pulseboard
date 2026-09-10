@@ -7,19 +7,69 @@ import {
   Clock3,
   ListTodo,
   Plus,
-  Search,
-  SlidersHorizontal,
 } from "lucide-react";
 import { TaskColumn } from "@/components/tasks/task-column";
-import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { Button } from "@/components/ui/button";
+
+import { filterTasks } from "@/lib/selectors/task-selectors";
+import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { useModalStore } from "@/store/modal-store";
 import { useWorkspaceStore } from "@/store/workspace-store";
+
+import { ClearFiltersButton } from "@/components/filters/clear-filters-button";
+import { FilterBar } from "@/components/filters/filter-bar";
+import { SearchFilter } from "@/components/filters/search-filter";
+import { SelectFilter } from "@/components/filters/select-filter";
+import { useQueryFilters } from "@/hooks/use-query-filters";
 
 export default function TasksPage() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
   const tasks = useWorkspaceStore((state) => state.tasks);
+
+  const projects = useWorkspaceStore((state) => state.projects);
+  const members = useWorkspaceStore((state) => state.members);
+
+  const { getFilter, setFilter, clearFilters, hasFilters } = useQueryFilters();
+
+  const search = getFilter("q");
+  const projectFilter = getFilter("project");
+  const priority = getFilter("priority");
+  const assignee = getFilter("assignee");
+
+  const filteredTasks = filterTasks(tasks, {
+    search,
+    project: projectFilter,
+    priority,
+    assignee,
+  });
+
+  const taskColumns = [
+    {
+      title: "Todo" as const,
+      description: "Planlanan işler",
+      icon: Circle,
+      tasks: filteredTasks.filter((task) => task.status === "Todo"),
+    },
+    {
+      title: "In Progress" as const,
+      description: "Aktif geliştirme",
+      icon: Clock3,
+      tasks: filteredTasks.filter((task) => task.status === "In Progress"),
+    },
+    {
+      title: "Review" as const,
+      description: "Kontrol bekleyenler",
+      icon: AlertCircle,
+      tasks: filteredTasks.filter((task) => task.status === "Review"),
+    },
+    {
+      title: "Done" as const,
+      description: "Tamamlanan işler",
+      icon: CheckCircle2,
+      tasks: filteredTasks.filter((task) => task.status === "Done"),
+    },
+  ];
 
   if (!canRenderProtected) {
     return (
@@ -28,34 +78,6 @@ export default function TasksPage() {
       </main>
     );
   }
-
-  const taskColumns = [
-    {
-      title: "Todo" as const,
-      description: "Planlanan işler",
-      icon: Circle,
-      tasks: tasks.filter((task) => task.status === "Todo"),
-    },
-    {
-      title: "In Progress" as const,
-      description: "Aktif geliştirme",
-      icon: Clock3,
-      tasks: tasks.filter((task) => task.status === "In Progress"),
-    },
-    {
-      title: "Review" as const,
-      description: "Kontrol bekleyenler",
-      icon: AlertCircle,
-      tasks: tasks.filter((task) => task.status === "Review"),
-    },
-    {
-      title: "Done" as const,
-      description: "Tamamlanan işler",
-      icon: CheckCircle2,
-      tasks: tasks.filter((task) => task.status === "Done"),
-    },
-  ];
-
   return (
     <div className="space-y-8">
       <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
@@ -86,20 +108,57 @@ export default function TasksPage() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row md:items-center md:justify-between">
-        <div className="relative w-full md:max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <input
-            placeholder="Görev ara..."
-            className="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm outline-none transition focus:bg-white focus:ring-4 focus:ring-slate-100"
-          />
-        </div>
+      <FilterBar>
+        <SearchFilter
+          value={search}
+          onChange={(value) => setFilter("q", value)}
+          placeholder="Görevlerde ara..."
+        />
 
-        <Button variant="outline" className="rounded-2xl">
-          <SlidersHorizontal size={18} />
-          Filters
-        </Button>
-      </section>
+        <SelectFilter
+          value={projectFilter}
+          onChange={(value) => setFilter("project", value)}
+          placeholder="Tüm projeler"
+          options={projects.map((project) => ({
+            label: project.name,
+            value: project.name,
+          }))}
+        />
+
+        <SelectFilter
+          value={priority}
+          onChange={(value) => setFilter("priority", value)}
+          placeholder="Tüm öncelikler"
+          options={[
+            {
+              label: "Düşük",
+              value: "Low",
+            },
+            {
+              label: "Orta",
+              value: "Medium",
+            },
+            {
+              label: "Yüksek",
+              value: "High",
+            },
+          ]}
+        />
+
+        <SelectFilter
+          value={assignee}
+          onChange={(value) => setFilter("assignee", value)}
+          placeholder="Tüm üyeler"
+          options={members
+            .filter((member) => member.status === "Active")
+            .map((member) => ({
+              label: member.name,
+              value: member.name,
+            }))}
+        />
+
+        <ClearFiltersButton visible={hasFilters()} onClear={clearFilters} />
+      </FilterBar>
 
       <section className="grid gap-5 xl:grid-cols-4">
         {taskColumns.map((column) => (
