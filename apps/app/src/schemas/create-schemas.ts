@@ -76,6 +76,8 @@ export type ProjectFormValues = z.infer<typeof projectSchema>;
 
 export type TaskFormValues = z.infer<typeof taskSchema>;
 
-export type LeadFormValues = z.infer<typeof leadSchema>;
+export type LeadFormInput = z.input<typeof leadSchema>;
+
+export type LeadFormValues = z.output<typeof leadSchema>;
 
 export type MemberFormValues = z.infer<typeof memberSchema>;

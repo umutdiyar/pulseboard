@@ -2,6 +2,8 @@
 
 import type { LeadColumn as LeadColumnType } from "@/data/leads-data";
 import { LeadCard } from "@/components/leads/lead-card";
+import { DraggableLead } from "@/components/leads/draggable-lead";
+import { LeadDropZone } from "@/components/leads/lead-drop-zone";
 
 const stageDotClasses: Record<LeadColumnType["title"], string> = {
   New: "bg-cyan-500",
@@ -23,6 +25,7 @@ export function LeadColumn({ column }: { column: LeadColumnType }) {
             <h2 className="text-sm font-semibold text-slate-950">
               {column.title}
             </h2>
+
             <p className="text-xs text-slate-500">{column.description}</p>
           </div>
         </div>
@@ -32,20 +35,25 @@ export function LeadColumn({ column }: { column: LeadColumnType }) {
         </span>
       </div>
 
-      <div className="space-y-3">
-        {column.leads.length > 0 ? (
-          column.leads.map((lead, index) => (
-            <LeadCard key={lead.id} lead={lead} index={index} />
-          ))
-        ) : (
-          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-6 text-center">
-            <p className="text-sm font-medium text-slate-700">Boş pipeline</p>
-            <p className="mt-1 text-xs text-slate-400">
-              Yeni lead buraya düşecek.
-            </p>
-          </div>
-        )}
-      </div>
+      <LeadDropZone stage={column.title}>
+        <div className="min-h-[180px] space-y-3">
+          {column.leads.length > 0 ? (
+            column.leads.map((lead, index) => (
+              <DraggableLead key={lead.id} lead={lead}>
+                <LeadCard lead={lead} index={index} />
+              </DraggableLead>
+            ))
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-6 text-center">
+              <p className="text-sm font-medium text-slate-700">Boş pipeline</p>
+
+              <p className="mt-1 text-xs text-slate-400">
+                Buraya lead sürüklenebilir.
+              </p>
+            </div>
+          )}
+        </div>
+      </LeadDropZone>
     </section>
   );
 }

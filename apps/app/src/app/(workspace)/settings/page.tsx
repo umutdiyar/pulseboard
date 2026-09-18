@@ -1,6 +1,6 @@
 "use client";
 
-import { Save, Settings, Trash } from "lucide-react";
+import { Save, Settings } from "lucide-react";
 import { SettingsSectionCard } from "@/components/settings/settings-section-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

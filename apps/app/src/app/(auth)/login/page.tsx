@@ -77,6 +77,12 @@ export default function LoginPage() {
         Şifre: <strong>{DEMO_CREDENTIALS.password}</strong>
       </div>
 
+      {error && (
+        <div className="mb-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-[12px] text-red-700">
+          {error}
+        </div>
+      )}
+
       <div className="mb-6">
         <AuthSocialButtons />
       </div>
@@ -233,7 +239,7 @@ export default function LoginPage() {
         >
           Gizlilik Politikası
         </Link>
-        'nı kabul etmiş olursunuz.
+        &apos;nı kabul etmiş olursunuz.
       </p>
     </AuthShell>
   );

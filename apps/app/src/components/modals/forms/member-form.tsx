@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Mail } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -33,7 +33,7 @@ export function MemberForm() {
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<MemberFormValues>({
@@ -46,7 +46,7 @@ export function MemberForm() {
     },
   });
 
-  const role = watch("role");
+  const role = useWatch({ control, name: "role" });
 
   async function onSubmit(values: MemberFormValues) {
     try {

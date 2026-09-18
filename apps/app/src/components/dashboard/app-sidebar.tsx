@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
 import { WorkspaceSwitcher } from "@/components/dashboard/workspace-switcher";
-import { UserMenu } from "@/components/dashboard/user-menu";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
@@ -28,6 +27,7 @@ const navItems = [
 
 export function AppSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
@@ -53,7 +53,6 @@ export function AppSidebar() {
       <nav className="flex-1 space-y-1 px-3">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const pathname = usePathname();
           const active = pathname === item.href;
 
           return (

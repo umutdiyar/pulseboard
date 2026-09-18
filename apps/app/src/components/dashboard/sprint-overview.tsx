@@ -43,7 +43,10 @@ export function SprintOverview() {
           const Icon = task.icon;
 
           return (
-            <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <div
+              key={task.title}
+              className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"
+            >
               <div className="flex items-center gap-3">
                 <Icon size={17} className="text-slate-500" />
                 <span className="text-sm font-medium text-slate-700">

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -43,7 +43,7 @@ export function TaskForm() {
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<TaskFormValues>({
@@ -60,10 +60,10 @@ export function TaskForm() {
     },
   });
 
-  const project = watch("project");
-  const status = watch("status");
-  const priority = watch("priority");
-  const assignee = watch("assignee");
+  const project = useWatch({ control, name: "project" });
+  const status = useWatch({ control, name: "status" });
+  const priority = useWatch({ control, name: "priority" });
+  const assignee = useWatch({ control, name: "assignee" });
 
   async function onSubmit(values: TaskFormValues) {
     try {

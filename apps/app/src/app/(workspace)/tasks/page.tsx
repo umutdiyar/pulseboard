@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import {
   AlertCircle,
   CheckCircle2,
@@ -22,7 +23,31 @@ import { SearchFilter } from "@/components/filters/search-filter";
 import { SelectFilter } from "@/components/filters/select-filter";
 import { useQueryFilters } from "@/hooks/use-query-filters";
 
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { isTaskStatus } from "@/lib/workspace-dnd";
+import { toast } from "sonner";
+
 export default function TasksPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-slate-50">
+          <p className="text-sm text-slate-500">Tasks yükleniyor...</p>
+        </main>
+      }
+    >
+      <TasksPageContent />
+    </Suspense>
+  );
+}
+
+function TasksPageContent() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
   const tasks = useWorkspaceStore((state) => state.tasks);
@@ -70,6 +95,43 @@ export default function TasksPage() {
       tasks: filteredTasks.filter((task) => task.status === "Done"),
     },
   ];
+
+  const moveTask = useWorkspaceStore((state) => state.moveTask);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+  );
+
+  function handleTaskDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (!over) {
+      return;
+    }
+
+    const taskId = String(active.id);
+    const targetStatus = String(over.id);
+
+    if (!isTaskStatus(targetStatus)) {
+      return;
+    }
+
+    const task = tasks.find((item) => item.id === taskId);
+
+    if (!task) {
+      return;
+    }
+
+    if (task.status === targetStatus) {
+      return;
+    }
+
+    moveTask(taskId, targetStatus);
+
+    toast.success("Görev durumu güncellendi", {
+      description: `${task.title} yeni kolona taşındı.`,
+    });
+  }
 
   if (!canRenderProtected) {
     return (
@@ -160,11 +222,13 @@ export default function TasksPage() {
         <ClearFiltersButton visible={hasFilters()} onClear={clearFilters} />
       </FilterBar>
 
-      <section className="grid gap-5 xl:grid-cols-4">
-        {taskColumns.map((column) => (
-          <TaskColumn key={column.title} column={column} />
-        ))}
-      </section>
+      <DndContext sensors={sensors} onDragEnd={handleTaskDragEnd}>
+        <section className="grid gap-5 xl:grid-cols-4">
+          {taskColumns.map((column) => (
+            <TaskColumn key={column.title} column={column} />
+          ))}
+        </section>
+      </DndContext>
     </div>
   );
 }

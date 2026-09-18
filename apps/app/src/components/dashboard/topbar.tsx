@@ -1,16 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Bell, Menu, Search } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/store/auth-store";
 
 import { MobileSidebar } from "@/components/dashboard/mobile-sidebar";
 
 export function Topbar() {
-  const router = useRouter();
-  const logout = useAuthStore((s) => s.logout);
-
   return (
     <header className="sticky top-0 z-40 h-16 shrink-0 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl">
       <div className="flex h-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">

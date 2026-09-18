@@ -2,6 +2,8 @@
 
 import type { TaskColumn as TaskColumnType } from "@/data/tasks-data";
 import { TaskCard } from "@/components/tasks/task-card";
+import { DraggableTask } from "@/components/tasks/draggable-task";
+import { TaskDropZone } from "@/components/tasks/task-drop-zone";
 
 export function TaskColumn({ column }: { column: TaskColumnType }) {
   const Icon = column.icon;
@@ -18,6 +20,7 @@ export function TaskColumn({ column }: { column: TaskColumnType }) {
             <h2 className="text-sm font-semibold text-slate-950">
               {column.title}
             </h2>
+
             <p className="text-xs text-slate-500">{column.description}</p>
           </div>
         </div>
@@ -27,20 +30,25 @@ export function TaskColumn({ column }: { column: TaskColumnType }) {
         </span>
       </div>
 
-      <div className="space-y-3">
-        {column.tasks.length > 0 ? (
-          column.tasks.map((task, index) => (
-            <TaskCard key={task.id} task={task} index={index} />
-          ))
-        ) : (
-          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-6 text-center">
-            <p className="text-sm font-medium text-slate-700">Boş kolon</p>
-            <p className="mt-1 text-xs text-slate-400">
-              Buraya görev sürüklenecek.
-            </p>
-          </div>
-        )}
-      </div>
+      <TaskDropZone status={column.title}>
+        <div className="min-h-32 space-y-3">
+          {column.tasks.length > 0 ? (
+            column.tasks.map((task, index) => (
+              <DraggableTask key={task.id} task={task}>
+                <TaskCard task={task} index={index} />
+              </DraggableTask>
+            ))
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-6 text-center">
+              <p className="text-sm font-medium text-slate-700">Boş kolon</p>
+
+              <p className="mt-1 text-xs text-slate-400">
+                Buraya görev sürüklenebilir.
+              </p>
+            </div>
+          )}
+        </div>
+      </TaskDropZone>
     </section>
   );
 }

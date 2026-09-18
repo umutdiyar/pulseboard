@@ -1,17 +1,21 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { useAuthStore } from "../../store/auth-store";
+
+function useAuthHydrated() {
+  return useSyncExternalStore(
+    (callback) => useAuthStore.persist?.onFinishHydration(callback) ?? (() => {}),
+    () => useAuthStore.persist?.hasHydrated() ?? false,
+    () => false,
+  );
+}
 
 export function useRequireAuth(redirectTo = "/login") {
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  const hydrated = useAuthHydrated();
 
   useEffect(() => {
     if (!hydrated) return;
@@ -31,11 +35,7 @@ export function useRequireAuth(redirectTo = "/login") {
 export function useRedirectIfAuthenticated(redirectTo = "/dashboard") {
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  const hydrated = useAuthHydrated();
 
   useEffect(() => {
     if (!hydrated) return;

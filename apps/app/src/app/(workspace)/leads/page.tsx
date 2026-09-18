@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import {
   CircleDollarSign,
   Plus,
@@ -23,7 +24,33 @@ import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/modal-store";
 import { useWorkspaceStore } from "@/store/workspace-store";
 
+import {
+  DndContext,
+  type DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+
+import { toast } from "sonner";
+
+import { isLeadStage } from "@/lib/workspace-dnd";
+
 export default function LeadsPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-slate-50">
+          <p className="text-sm text-slate-500">Leads yükleniyor...</p>
+        </main>
+      }
+    >
+      <LeadsPageContent />
+    </Suspense>
+  );
+}
+
+function LeadsPageContent() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
   const leads = useWorkspaceStore((state) => state.leads);
@@ -61,6 +88,47 @@ export default function LeadsPage() {
     currency: "TRY",
     maximumFractionDigits: 0,
   }).format(totalValue);
+
+  const moveLead = useWorkspaceStore((state) => state.moveLead);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+  );
+
+  function handleLeadDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (!over) {
+      return;
+    }
+
+    const leadId = String(active.id);
+    const targetStage = String(over.id);
+
+    if (!isLeadStage(targetStage)) {
+      return;
+    }
+
+    const lead = leads.find((item) => item.id === leadId);
+
+    if (!lead) {
+      return;
+    }
+
+    if (lead.stage === targetStage) {
+      return;
+    }
+
+    moveLead(leadId, targetStage);
+
+    toast.success("Pipeline güncellendi", {
+      description: `${lead.name} yeni aşamaya taşındı.`,
+    });
+  }
 
   const leadColumns = [
     {
@@ -224,11 +292,13 @@ export default function LeadsPage() {
         <ClearFiltersButton visible={hasFilters()} onClear={clearFilters} />
       </FilterBar>
 
-      <section className="grid gap-5 xl:grid-cols-4">
-        {leadColumns.map((column) => (
-          <LeadColumn key={column.title} column={column} />
-        ))}
-      </section>
+      <DndContext sensors={sensors} onDragEnd={handleLeadDragEnd}>
+        <section className="grid gap-5 xl:grid-cols-4">
+          {leadColumns.map((column) => (
+            <LeadColumn key={column.title} column={column} />
+          ))}
+        </section>
+      </DndContext>
     </div>
   );
 }

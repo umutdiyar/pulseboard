@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { FolderKanban, FolderSearch, Plus } from "lucide-react";
 
 import { ProjectCard } from "@/components/projects/project-card";
@@ -18,6 +19,20 @@ import { useQueryFilters } from "@/hooks/use-query-filters";
 import { filterProjects } from "@/lib/selectors/project-selectors";
 
 export default function ProjectsPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-slate-50">
+          <p className="text-sm text-slate-500">Projects yükleniyor...</p>
+        </main>
+      }
+    >
+      <ProjectsPageContent />
+    </Suspense>
+  );
+}
+
+function ProjectsPageContent() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
   const projects = useWorkspaceStore((state) => state.projects);

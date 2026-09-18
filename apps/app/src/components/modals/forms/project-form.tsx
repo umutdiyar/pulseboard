@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ export function ProjectForm() {
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ProjectFormValues>({
@@ -57,8 +57,8 @@ export function ProjectForm() {
     },
   });
 
-  const status = watch("status");
-  const owner = watch("owner");
+  const status = useWatch({ control, name: "status" });
+  const owner = useWatch({ control, name: "owner" });
 
   async function onSubmit(values: ProjectFormValues) {
     try {

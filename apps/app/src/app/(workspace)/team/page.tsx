@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { Plus, Users, UserSearch } from "lucide-react";
 
 import { ClearFiltersButton } from "@/components/filters/clear-filters-button";
@@ -19,6 +20,20 @@ import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/modal-store";
 
 export default function TeamPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-slate-50">
+          <p className="text-sm text-slate-500">Team yükleniyor...</p>
+        </main>
+      }
+    >
+      <TeamPageContent />
+    </Suspense>
+  );
+}
+
+function TeamPageContent() {
   const { canRenderProtected } = useRequireAuth("/login");
   const openModal = useModalStore((state) => state.openModal);
   const teamMembers = useWorkspaceStore((state) => state.members);

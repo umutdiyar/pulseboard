@@ -34,6 +34,7 @@ const navItems = [
 
 export function MobileSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
@@ -62,7 +63,6 @@ export function MobileSidebar() {
         <nav className="space-y-1 px-3">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const pathname = usePathname();
             const active = pathname === item.href;
 
             return (

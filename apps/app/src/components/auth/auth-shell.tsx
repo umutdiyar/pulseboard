@@ -233,8 +233,9 @@ export function AuthShell({ mode, children }: AuthShellProps) {
                 </div>
 
                 <p className="mb-3 text-[12.5px] leading-relaxed text-white/40">
-                  "Haftalık durum toplantılarımızı tamamen kaldırdık. PulseBoard
-                  sayesinde herkes ne yapması gerektiğini biliyor."
+                  &quot;Haftalık durum toplantılarımızı tamamen kaldırdık.
+                  PulseBoard sayesinde herkes ne yapması gerektiğini
+                  biliyor.&quot;
                 </p>
 
                 <div className="flex items-center gap-2.5">

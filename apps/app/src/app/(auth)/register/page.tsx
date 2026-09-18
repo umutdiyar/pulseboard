@@ -168,7 +168,7 @@ export default function RegisterPage() {
               <circle cx="12" cy="12" r="10" />
               <path d="M12 8v4M12 16h.01" />
             </svg>
-            Çalışma alanı URL'si bu isimden oluşturulur. Sonradan
+            Çalışma alanı URL&apos;si bu isimden oluşturulur. Sonradan
             değiştirilebilir.
           </p>
         </div>
@@ -223,7 +223,7 @@ export default function RegisterPage() {
             >
               Gizlilik Politikası
             </Link>
-            'nı okudum ve kabul ediyorum.
+            &apos;nı okudum ve kabul ediyorum.
           </span>
         </label>
 

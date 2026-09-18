@@ -35,6 +35,9 @@ type WorkspaceState = {
   addLead: (input: CreateLeadInput) => Lead;
   inviteMember: (input: InviteMemberInput) => TeamMember;
 
+  moveTask: (taskId: string, status: Task["status"]) => void;
+  moveLead: (leadId: string, status: Lead["stage"]) => void;
+
   resetDemoData: () => void;
 };
 
@@ -124,6 +127,32 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }));
 
         return member;
+      },
+
+      moveTask: (taskId, status) => {
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === taskId
+              ? {
+                  ...task,
+                  status,
+                }
+              : task,
+          ),
+        }));
+      },
+
+      moveLead: (leadId, stage) => {
+        set((state) => ({
+          leads: state.leads.map((lead) =>
+            lead.id === leadId
+              ? {
+                  ...lead,
+                  stage,
+                }
+              : lead,
+          ),
+        }));
       },
 
       resetDemoData: () => {

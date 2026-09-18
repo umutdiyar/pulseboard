@@ -1,12 +1,10 @@
 "use client";
 
-import { FolderKanban, ListTodo, Target, Users } from "lucide-react";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { SprintOverview } from "@/components/dashboard/sprint-overview";
 import { LeadPipeline } from "@/components/dashboard/lead-pipeline";
 import { RecentTasks } from "@/components/dashboard/recent-tasks";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
-import { QuickActions } from "@/components/dashboard/quick-actions";
 import { metricCards } from "@/data/dashboard-data";
 import { useRequireAuth } from "@/lib/auth/auth-guard";
 import { useAuthStore } from "@/store/auth-store";

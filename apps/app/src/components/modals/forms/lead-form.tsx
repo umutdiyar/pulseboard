@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { leadSchema, type LeadFormValues } from "@/schemas/create-schemas";
+import {
+  leadSchema,
+  type LeadFormInput,
+  type LeadFormValues,
+} from "@/schemas/create-schemas";
 
 import { useModalStore } from "@/store/modal-store";
 import { useWorkspaceStore } from "@/store/workspace-store";
@@ -35,10 +39,10 @@ export function LeadForm() {
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<LeadFormValues>({
+  } = useForm<LeadFormInput, unknown, LeadFormValues>({
     resolver: zodResolver(leadSchema),
 
     defaultValues: {
@@ -53,9 +57,9 @@ export function LeadForm() {
     },
   });
 
-  const stage = watch("stage");
-  const priority = watch("priority");
-  const owner = watch("owner");
+  const stage = useWatch({ control, name: "stage" });
+  const priority = useWatch({ control, name: "priority" });
+  const owner = useWatch({ control, name: "owner" });
 
   async function onSubmit(values: LeadFormValues) {
     try {
