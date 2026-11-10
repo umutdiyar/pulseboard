@@ -56,3 +56,28 @@ export type TeamMember = {
   status: TeamStatus;
   joinedAt: string;
 };
+
+export type ActivityAction = "created" | "status_changed" | "invited";
+
+export type ActivityEntityType =
+  | "project"
+  | "task"
+  | "lead"
+  | "member"
+  | "sprint";
+
+export type ActivityMetadata = {
+  from?: string;
+  to?: string;
+};
+
+export type Activity = {
+  id: string;
+  actorName: string;
+  action: ActivityAction;
+  entityType: ActivityEntityType;
+  entityId: string;
+  entityName: string;
+  metadata?: ActivityMetadata;
+  createdAt: string;
+};
